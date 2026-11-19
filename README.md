@@ -28,7 +28,13 @@ Kit d'installation pour faire tourner **[OpenJarvis](https://github.com/open-jar
 
 ### 1. Installer sur le PC
 
-Ouvrir **PowerShell** (pas besoin d'administrateur pour la plupart des étapes) dans le dossier du dépôt :
+**Le plus simple — une seule commande** dans PowerShell (installe tout dans `Documents\JARVIS` et programme le démarrage automatique) :
+
+```powershell
+irm https://raw.githubusercontent.com/BenjaminLepo/JARVIS/main/scripts/bootstrap.ps1 | iex
+```
+
+Ou manuellement : ouvrir **PowerShell** (pas besoin d'administrateur pour la plupart des étapes) dans le dossier du dépôt :
 
 ```powershell
 git clone https://github.com/BenjaminLepo/jarvis.git

@@ -43,8 +43,13 @@ if (-not (Has jarvis)) {
     Refresh-Path
 } else { Write-Host "OpenJarvis déjà installé." }
 
-Step "4/4 Téléchargement du modèle $JarvisModel"
+Step "4/4 Téléchargement du modèle $JarvisModel (plusieurs Go, patience)"
+if (-not (Get-Process ollama -ErrorAction SilentlyContinue)) {
+    Start-Process ollama -ArgumentList "serve" -WindowStyle Hidden
+    Start-Sleep -Seconds 5
+}
 ollama pull $JarvisModel
+if ($LASTEXITCODE -ne 0) { throw "Échec du téléchargement du modèle $JarvisModel" }
 
 Step "Diagnostic OpenJarvis"
 try { jarvis doctor } catch { Write-Warning "jarvis doctor a signalé un problème : $_" }
