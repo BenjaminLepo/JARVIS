@@ -39,6 +39,16 @@ if (-not (Has tailscale)) {
 
 Step "3/4 OpenJarvis (installeur officiel Windows)"
 if (-not (Has jarvis)) {
+    # OpenJarvis compile une extension Rust : il faut l'éditeur de liens MSVC (Build Tools C++)
+    $vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
+    $hasVC = (Test-Path $vswhere) -and
+             (& $vswhere -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath)
+    if (-not $hasVC) {
+        Write-Host "Installation des outils de compilation C++ Microsoft (plusieurs Go, 10-20 min, accepter la demande Windows)..." -ForegroundColor Yellow
+        winget install -e --id Microsoft.VisualStudio.2022.BuildTools --accept-source-agreements --accept-package-agreements `
+            --override "--wait --quiet --add Microsoft.VisualStudio.Workload.VCTools --includeRecommended"
+        Refresh-Path
+    } else { Write-Host "Outils de compilation C++ déjà présents." }
     Invoke-RestMethod https://open-jarvis.github.io/OpenJarvis/install.ps1 | Invoke-Expression
     Refresh-Path
 } else { Write-Host "OpenJarvis déjà installé." }
