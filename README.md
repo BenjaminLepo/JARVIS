@@ -85,7 +85,7 @@ Voir [`docs/SECURITE.md`](docs/SECURITE.md). En résumé : le serveur OpenJarvis
 ```
 scripts/install-windows.ps1     installation complète
 scripts/start-jarvis.ps1        démarre le serveur sur l'IP Tailscale
-scripts/register-autostart.ps1  tâche planifiée à l'ouverture de session
+scripts/register-autostart.ps1  démarrage auto (dossier Démarrage) + lancement
 scripts/test-jarvis.ps1         test rapide de l'API
 iphone/RACCOURCI-IPHONE.md      création pas à pas du raccourci « Jarvis »
 docs/SECURITE.md                règles de sécurité
