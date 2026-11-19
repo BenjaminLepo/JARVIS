@@ -18,7 +18,12 @@ $body = @{
     )
 } | ConvertTo-Json -Depth 5
 
+$key = $env:OPENJARVIS_API_KEY
+if (-not $key) { $key = [Environment]::GetEnvironmentVariable("OPENJARVIS_API_KEY", "User") }
+$headers = @{}
+if ($key) { $headers["Authorization"] = "Bearer $key" }
+
 Write-Host "POST $url"
-$r = Invoke-RestMethod -Uri $url -Method Post -ContentType "application/json; charset=utf-8" `
+$r = Invoke-RestMethod -Uri $url -Method Post -Headers $headers -ContentType "application/json; charset=utf-8" `
      -Body ([Text.Encoding]::UTF8.GetBytes($body))
 $r.choices[0].message.content

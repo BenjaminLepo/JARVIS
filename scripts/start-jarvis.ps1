@@ -18,6 +18,14 @@ if ($bind -eq "0.0.0.0") {
     throw "Refus d'ecouter sur 0.0.0.0 : le serveur n'a pas de mot de passe. Voir docs\SECURITE.md."
 }
 
+# Cle d'acces obligatoire hors localhost (creee par scripts\setup-key.ps1)
+if (-not $env:OPENJARVIS_API_KEY) {
+    $env:OPENJARVIS_API_KEY = [Environment]::GetEnvironmentVariable("OPENJARVIS_API_KEY", "User")
+}
+if (-not $env:OPENJARVIS_API_KEY -and $bind -ne "127.0.0.1") {
+    throw "Cle Jarvis absente. Lancez d'abord : powershell -ExecutionPolicy Bypass -File .\scripts\setup-key.ps1"
+}
+
 # Ollama doit tourner (normalement lance par son application au demarrage)
 if (-not (Get-Process ollama -ErrorAction SilentlyContinue)) {
     Start-Process ollama -ArgumentList "serve" -WindowStyle Hidden

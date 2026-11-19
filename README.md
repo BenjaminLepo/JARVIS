@@ -76,7 +76,7 @@ Pistes pour la suite : donner accès à un dossier du PC (documents d'opération
 
 ## Sécurité — à lire
 
-Voir [`docs/SECURITE.md`](docs/SECURITE.md). En résumé : le serveur OpenJarvis **n'a pas de mot de passe**, il ne doit donc écouter **que sur l'adresse Tailscale**, jamais sur `0.0.0.0` ni sur le Wi-Fi du bureau. Les scripts le configurent ainsi.
+Voir [`docs/SECURITE.md`](docs/SECURITE.md). En résumé : Jarvis n'écoute **que sur l'adresse Tailscale** et exige une **clé d'accès** (`scripts\setup-key.ps1`), jamais exposé sur `0.0.0.0` ni sur le Wi-Fi du bureau.
 
 > ⚠️ **PC professionnel** : installer Ollama/Tailscale et faire tourner un serveur sur un poste SPIRIT peut nécessiter l'accord du service informatique. À valider avant l'étape 1.
 
@@ -87,6 +87,7 @@ scripts/install-windows.ps1     installation complète
 scripts/start-jarvis.ps1        démarre le serveur sur l'IP Tailscale
 scripts/register-autostart.ps1  démarrage auto (dossier Démarrage) + lancement
 scripts/test-jarvis.ps1         test rapide de l'API
+scripts/setup-key.ps1           crée la clé d'accès Jarvis
 iphone/RACCOURCI-IPHONE.md      création pas à pas du raccourci « Jarvis »
 docs/SECURITE.md                règles de sécurité
 jarvis.config.ps1               réglages (modèle, port, agent)
