@@ -23,7 +23,7 @@ Kit d'installation pour faire tourner **[OpenJarvis](https://github.com/open-jar
 |---|-------|----|-------|
 | 1 | `scripts\install-windows.ps1` : installe Ollama, Tailscale, OpenJarvis et télécharge le modèle | PC | 15–30 min |
 | 2 | Se connecter à Tailscale sur le PC **et** sur l'iPhone (même compte) | PC + iPhone | 5 min |
-| 3 | `scripts\register-autostart.ps1` : Jarvis démarre tout seul à l'ouverture de session | PC | 1 min |
+| 3 | `scripts\register-autostart.ps1` : Jarvis démarre tout seul à l'ouverture de session (raccourci dans le dossier Démarrage, sans droits admin) | PC | 1 min |
 | 4 | Créer le raccourci iPhone → [`iphone/RACCOURCI-IPHONE.md`](iphone/RACCOURCI-IPHONE.md) | iPhone | 10 min |
 
 ### 1. Installer sur le PC

@@ -1,19 +1,25 @@
-﻿<#
-  Crée une tâche planifiée « Jarvis » qui lance start-jarvis.ps1 à l'ouverture de session.
-  Supprimer :  Unregister-ScheduledTask -TaskName Jarvis -Confirm:$false
+﻿﻿<#
+  Démarrage automatique de Jarvis à l'ouverture de session, SANS droits administrateur :
+  un raccourci est placé dans le dossier Démarrage de Windows. Jarvis est aussi lancé tout de suite.
+  Désactiver : supprimer "Jarvis.lnk" du dossier shell:startup.
 #>
 $ErrorActionPreference = "Stop"
-$script = Join-Path $PSScriptRoot "start-jarvis.ps1"
+$script  = Join-Path $PSScriptRoot "start-jarvis.ps1"
+$startup = [Environment]::GetFolderPath("Startup")
+$lnkPath = Join-Path $startup "Jarvis.lnk"
 
-$action  = New-ScheduledTaskAction -Execute "powershell.exe" `
-           -Argument "-NoProfile -WindowStyle Hidden -ExecutionPolicy Bypass -File `"$script`""
-# Délai de 60 s pour laisser Tailscale se connecter
-$trigger = New-ScheduledTaskTrigger -AtLogOn -User $env:USERNAME
-$trigger.Delay = "PT60S"
-$settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries `
-            -RestartCount 3 -RestartInterval (New-TimeSpan -Minutes 2) -ExecutionTimeLimit 0
+$ws  = New-Object -ComObject WScript.Shell
+$lnk = $ws.CreateShortcut($lnkPath)
+$lnk.TargetPath       = "powershell.exe"
+# 60 s d'attente pour laisser Tailscale se connecter après l'ouverture de session
+$lnk.Arguments        = "-NoProfile -WindowStyle Hidden -ExecutionPolicy Bypass -Command `"Start-Sleep 60; & '$script'`""
+$lnk.WorkingDirectory = Split-Path -Parent $PSScriptRoot
+$lnk.WindowStyle      = 7
+$lnk.Description      = "Serveur Jarvis (OpenJarvis) sur l'IP Tailscale"
+$lnk.Save()
+Write-Host "Démarrage automatique activé : $lnkPath" -ForegroundColor Green
 
-Register-ScheduledTask -TaskName "Jarvis" -Action $action -Trigger $trigger `
-    -Settings $settings -Description "Serveur Jarvis (OpenJarvis) sur l'IP Tailscale" -Force | Out-Null
-
-Write-Host "Tâche 'Jarvis' créée : Jarvis démarrera à chaque ouverture de session." -ForegroundColor Green
+# Lancement immédiat, en arrière-plan
+Start-Process powershell.exe -WindowStyle Hidden -ArgumentList `
+    "-NoProfile -ExecutionPolicy Bypass -File `"$script`""
+Write-Host "Jarvis démarre en arrière-plan (journal : jarvis.log dans le dossier JARVIS)." -ForegroundColor Green
