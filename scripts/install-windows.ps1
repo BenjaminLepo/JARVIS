@@ -1,4 +1,4 @@
-﻿<#
+<#
   Installation de Jarvis (OpenJarvis + Ollama + Tailscale) sur Windows.
   Usage :  .\scripts\install-windows.ps1 [-Model qwen3:8b]
 #>
@@ -25,21 +25,21 @@ if (-not (Has winget)) {
     throw "winget est introuvable. Installez 'App Installer' depuis le Microsoft Store puis relancez."
 }
 
-Step "1/4 Ollama (moteur qui fait tourner le modèle en local)"
+Step "1/4 Ollama (moteur qui fait tourner le modele en local)"
 if (-not (Has ollama)) {
     winget install -e --id Ollama.Ollama --accept-source-agreements --accept-package-agreements
     Refresh-Path
-} else { Write-Host "Ollama déjà installé." }
+} else { Write-Host "Ollama deja installe." }
 
-Step "2/4 Tailscale (liaison privée iPhone <-> PC)"
+Step "2/4 Tailscale (liaison privee iPhone <-> PC)"
 if (-not (Has tailscale)) {
     winget install -e --id Tailscale.Tailscale --accept-source-agreements --accept-package-agreements
     Refresh-Path
-} else { Write-Host "Tailscale déjà installé." }
+} else { Write-Host "Tailscale deja installe." }
 
 Step "3/4 OpenJarvis (installeur officiel Windows)"
 if (-not (Has jarvis)) {
-    # OpenJarvis compile une extension Rust : il faut l'éditeur de liens MSVC (Build Tools C++)
+    # OpenJarvis compile une extension Rust : il faut l'editeur de liens MSVC (Build Tools C++)
     $vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
     $hasVC = (Test-Path $vswhere) -and
              (& $vswhere -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath)
@@ -48,28 +48,28 @@ if (-not (Has jarvis)) {
         winget install -e --id Microsoft.VisualStudio.2022.BuildTools --accept-source-agreements --accept-package-agreements `
             --override "--wait --quiet --add Microsoft.VisualStudio.Workload.VCTools --includeRecommended"
         Refresh-Path
-    } else { Write-Host "Outils de compilation C++ déjà présents." }
+    } else { Write-Host "Outils de compilation C++ deja presents." }
     Invoke-RestMethod https://open-jarvis.github.io/OpenJarvis/install.ps1 | Invoke-Expression
     Refresh-Path
-} else { Write-Host "OpenJarvis déjà installé." }
+} else { Write-Host "OpenJarvis deja installe." }
 
-Step "4/4 Téléchargement du modèle $JarvisModel (plusieurs Go, patience)"
+Step "4/4 Telechargement du modele $JarvisModel (plusieurs Go, patience)"
 if (-not (Get-Process ollama -ErrorAction SilentlyContinue)) {
     Start-Process ollama -ArgumentList "serve" -WindowStyle Hidden
     Start-Sleep -Seconds 5
 }
 ollama pull $JarvisModel
-if ($LASTEXITCODE -ne 0) { throw "Échec du téléchargement du modèle $JarvisModel" }
+if ($LASTEXITCODE -ne 0) { throw "Echec du telechargement du modele $JarvisModel" }
 
 Step "Diagnostic OpenJarvis"
-try { jarvis doctor } catch { Write-Warning "jarvis doctor a signalé un problème : $_" }
+try { jarvis doctor } catch { Write-Warning "jarvis doctor a signale un probleme : $_" }
 
 Write-Host @"
 
-Installation terminée.
-Étapes suivantes :
-  1. Cliquez sur l'icône Tailscale (barre des tâches) -> Log in. Faites de même sur l'iPhone.
-  2. .\scripts\register-autostart.ps1   (démarrage automatique)
-  3. .\scripts\start-jarvis.ps1         (démarrer maintenant)
+Installation terminee.
+Etapes suivantes :
+  1. Cliquez sur l'icone Tailscale (barre des taches) -> Log in. Faites de meme sur l'iPhone.
+  2. .\scripts\register-autostart.ps1   (demarrage automatique)
+  3. .\scripts\start-jarvis.ps1         (demarrer maintenant)
   4. Raccourci iPhone : iphone\RACCOURCI-IPHONE.md
 "@ -ForegroundColor Green

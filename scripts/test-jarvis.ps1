@@ -1,7 +1,7 @@
-﻿<#
+<#
   Test rapide : .\scripts\test-jarvis.ps1 "Bonjour Jarvis"
 #>
-param([string]$Question = "Bonjour Jarvis, présente-toi en une phrase.")
+param([string]$Question = "Bonjour Jarvis, presente-toi en une phrase.")
 $root = Split-Path -Parent $PSScriptRoot
 . (Join-Path $root "jarvis.config.ps1")
 
@@ -13,7 +13,7 @@ $url = "http://${h}:$JarvisPort/v1/chat/completions"
 $body = @{
     model    = $JarvisModel
     messages = @(
-        @{ role = "system"; content = "Tu es Jarvis, l'assistant personnel de Benjamin. Réponds en français, brièvement." },
+        @{ role = "system"; content = "Tu es Jarvis, l'assistant personnel de Benjamin. Reponds en francais, brievement." },
         @{ role = "user";   content = $Question }
     )
 } | ConvertTo-Json -Depth 5
