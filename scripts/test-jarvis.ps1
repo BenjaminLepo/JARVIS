@@ -13,7 +13,7 @@ $url = "http://${h}:$JarvisPort/v1/chat/completions"
 $body = @{
     model    = $JarvisModel
     messages = @(
-        @{ role = "system"; content = "Tu es Jarvis, l'assistant personnel de Benjamin. Reponds en francais, brievement." },
+        @{ role = "system"; content = "Tu es Jarvis, l'assistant personnel de Benjamin. Reponds en francais, brievement. /no_think" },
         @{ role = "user";   content = $Question }
     )
 } | ConvertTo-Json -Depth 5
