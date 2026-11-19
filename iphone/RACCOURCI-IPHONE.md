@@ -26,12 +26,9 @@ Adresse du PC : `http://ADRESSE-PC:8000`, où `ADRESSE-PC` est le nom Tailscale 
        | `messages` | Tableau | 2 éléments de type **Dictionnaire** (ci-dessous) |
      - Élément 1 du tableau : `role` = `system` ; `content` = `Tu es Jarvis, l'assistant personnel de Benjamin. Réponds en français, en deux ou trois phrases, sans mise en forme.`
      - Élément 2 du tableau : `role` = `user` ; `content` = variable **Texte dicté**
-4. Action **Obtenir la valeur du dictionnaire** → clé `choices` dans *Contenu de l'URL*
-5. Action **Obtenir l'élément de la liste** → *Premier élément*
-6. Action **Obtenir la valeur du dictionnaire** → clé `message`
-7. Action **Obtenir la valeur du dictionnaire** → clé `content`
-8. Action **Énoncer le texte** → *Valeur du dictionnaire* (voix française, ex. Thomas)
-9. *(facultatif)* Action **Afficher le résultat** pour voir la réponse écrite.
+4. Action **Obtenir la valeur du dictionnaire** → clé `choices.1.message.content` dans *Contenu de l'URL* (une seule action suffit grâce à ce chemin)
+5. Action **Énoncer le texte** → *Valeur du dictionnaire* (voix française, ex. Thomas)
+6. *(facultatif)* Action **Afficher le résultat** pour voir la réponse écrite.
 
 ## Le lancer à la place de Siri
 
